@@ -1,0 +1,14 @@
+{
+  "name": "moodwave",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI 감성 분석 웹 서비스 MOODWAVE",
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env scripts/dev-server.js",
+    "test": "node --test"
+  }
+}

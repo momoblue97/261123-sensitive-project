@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MOODWAVE — AI 감성 분석</title>
+  <meta name="description" content="문장을 입력하면 AI가 긍정·부정·중립을 판정하고 신뢰도와 판단 이유를 알려 드립니다.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="/css/fonts.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script type="module" src="/js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#analyze">본문으로 바로가기</a>
+
+  <!-- ===== Header ===== -->
+  <header class="site-header" id="site-header">
+    <div class="container site-header__inner">
+      <a class="site-header__logo" href="#home">MOODWAVE</a>
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <ul class="site-nav__list" id="site-nav-list">
+          <li><a class="site-nav__link" href="#home">Home</a></li>
+          <li><a class="site-nav__link" href="#analyze">Analyze</a></li>
+          <li><a class="site-nav__link" href="#result">Result</a></li>
+          <li><a class="site-nav__link" href="#about">About</a></li>
+        </ul>
+      </nav>
+      <button class="menu-button" id="menu-button" type="button" aria-expanded="false" aria-controls="site-nav-list" aria-label="메뉴 열기">
+        <svg class="menu-button__icon menu-button__icon--open" viewBox="0 0 32 24" aria-hidden="true" focusable="false">
+          <path d="M2 3h28M12 12h18M2 21h28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <svg class="menu-button__icon menu-button__icon--close" viewBox="0 0 32 24" aria-hidden="true" focusable="false">
+          <path d="M7 2l18 20M25 2L7 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===== 1. Hero ===== -->
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <svg class="hero__waves" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 200C240 140 480 140 720 200S1200 260 1440 200" fill="none" stroke="currentColor" stroke-width="1"/>
+        <path d="M0 240C240 180 480 180 720 240S1200 300 1440 240" fill="none" stroke="currentColor" stroke-width="1"/>
+        <path d="M0 280C240 220 480 220 720 280S1200 340 1440 280" fill="none" stroke="currentColor" stroke-width="1"/>
+      </svg>
+      <div class="container hero__inner">
+        <h1 class="hero__title" id="hero-title">Read the mood of your words</h1>
+        <p class="hero__text">문장 속에 담긴 감정을 AI가 긍정 · 부정 · 중립으로 읽어 드립니다.</p>
+        <a class="text-link" href="#analyze">
+          분석 시작하기
+          <svg class="arrow-icon" viewBox="0 0 32 12" aria-hidden="true" focusable="false"><path d="M0 6h30M25 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===== 2. Analyze ===== -->
+    <section class="section section--navy" id="analyze" aria-labelledby="analyze-title">
+      <div class="container analyze">
+        <div class="analyze__intro">
+          <p class="eyebrow">MOODWAVE</p>
+          <h2 class="section-title" id="analyze-title">ANALYZE</h2>
+          <p class="section-text">분석하고 싶은 문장을 입력해 주세요.<br>AI가 문장의 감정을 판정하고, 그렇게 판단한 이유를 함께 알려 드립니다.</p>
+          <ul class="analyze__tips">
+            <li>최대 1,000자까지 입력할 수 있습니다.</li>
+            <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> (Mac은 <kbd>⌘</kbd> + <kbd>Enter</kbd>)로 바로 분석할 수 있습니다.</li>
+            <li>입력한 문장은 분석을 위해 OpenAI로 전송되며, 저장하지 않습니다.</li>
+          </ul>
+        </div>
+
+        <form class="analyze-form" id="analyze-form" novalidate>
+          <label class="analyze-form__label" for="text-input">분석할 문장</label>
+          <textarea class="analyze-form__textarea" id="text-input" name="text" rows="8"
+            placeholder="예) 오늘 처음 가 본 카페가 생각보다 훨씬 좋아서 기분이 좋아졌어요."
+            aria-describedby="char-counter analyze-error-message"></textarea>
+          <p class="char-counter" id="char-counter"><span id="char-count">0</span> / 1,000</p>
+
+          <div class="examples" role="group" aria-labelledby="examples-label">
+            <span class="examples__label" id="examples-label">예시 문장</span>
+            <button class="chip" id="example-positive" type="button" data-example="positive">긍정 예시</button>
+            <button class="chip" id="example-negative" type="button" data-example="negative">부정 예시</button>
+            <button class="chip" id="example-neutral" type="button" data-example="neutral">중립 예시</button>
+          </div>
+
+          <div class="analyze-form__actions">
+            <button class="button button--primary" id="analyze-button" type="submit">
+              <span class="button__spinner" aria-hidden="true"></span>
+              <span id="analyze-button-label">분석하기</span>
+              <svg class="arrow-icon" viewBox="0 0 32 12" aria-hidden="true" focusable="false"><path d="M0 6h30M25 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </button>
+            <button class="button button--ghost" id="clear-button" type="button">지우기</button>
+          </div>
+
+          <div class="error-box" id="analyze-error" role="alert" hidden>
+            <svg class="error-box__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+              <circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10 5.5v5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <circle cx="10" cy="14.2" r="1" fill="currentColor"/>
+            </svg>
+            <p class="error-box__message" id="analyze-error-message"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== 3. Result ===== -->
+    <section class="section section--charcoal" id="result" aria-labelledby="result-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--muted">MOODWAVE</p>
+        <h2 class="section-title" id="result-title" tabindex="-1">RESULT</h2>
+        <p class="result-status" id="result-status" role="status">문장을 입력하고 분석하기를 누르면 결과가 여기에 표시됩니다.</p>
+
+        <ol class="result-list" id="result-list">
+          <li class="result-item" id="result-item-positive" data-sentiment="positive">
+            <span class="result-item__dot" aria-hidden="true"></span>
+            <article class="result-card" aria-labelledby="card-title-positive">
+              <h3 class="result-card__title" id="card-title-positive">Positive<span class="result-card__label">긍정</span></h3>
+              <div class="result-card__body" id="card-body-positive" hidden>
+                <p class="result-card__meta">신뢰도</p>
+                <p class="result-card__confidence"><span id="card-confidence-positive">0</span>%</p>
+                <div class="confidence-bar" aria-hidden="true"><span class="confidence-bar__fill" id="card-bar-positive"></span></div>
+                <p class="result-card__meta result-card__meta--reason">분석 이유</p>
+                <p class="result-card__reason" id="card-reason-positive"></p>
+              </div>
+              <svg class="result-card__icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="23" cy="26" r="2.2" fill="currentColor"/>
+                <circle cx="41" cy="26" r="2.2" fill="currentColor"/>
+                <path d="M21 38c3 5 7 8 11 8s8-3 11-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </article>
+          </li>
+          <li class="result-item" id="result-item-neutral" data-sentiment="neutral">
+            <span class="result-item__dot" aria-hidden="true"></span>
+            <article class="result-card" aria-labelledby="card-title-neutral">
+              <h3 class="result-card__title" id="card-title-neutral">Neutral<span class="result-card__label">중립</span></h3>
+              <div class="result-card__body" id="card-body-neutral" hidden>
+                <p class="result-card__meta">신뢰도</p>
+                <p class="result-card__confidence"><span id="card-confidence-neutral">0</span>%</p>
+                <div class="confidence-bar" aria-hidden="true"><span class="confidence-bar__fill" id="card-bar-neutral"></span></div>
+                <p class="result-card__meta result-card__meta--reason">분석 이유</p>
+                <p class="result-card__reason" id="card-reason-neutral"></p>
+              </div>
+              <svg class="result-card__icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="23" cy="26" r="2.2" fill="currentColor"/>
+                <circle cx="41" cy="26" r="2.2" fill="currentColor"/>
+                <path d="M22 41h20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </article>
+          </li>
+          <li class="result-item" id="result-item-negative" data-sentiment="negative">
+            <span class="result-item__dot" aria-hidden="true"></span>
+            <article class="result-card" aria-labelledby="card-title-negative">
+              <h3 class="result-card__title" id="card-title-negative">Negative<span class="result-card__label">부정</span></h3>
+              <div class="result-card__body" id="card-body-negative" hidden>
+                <p class="result-card__meta">신뢰도</p>
+                <p class="result-card__confidence"><span id="card-confidence-negative">0</span>%</p>
+                <div class="confidence-bar" aria-hidden="true"><span class="confidence-bar__fill" id="card-bar-negative"></span></div>
+                <p class="result-card__meta result-card__meta--reason">분석 이유</p>
+                <p class="result-card__reason" id="card-reason-negative"></p>
+              </div>
+              <svg class="result-card__icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="23" cy="26" r="2.2" fill="currentColor"/>
+                <circle cx="41" cy="26" r="2.2" fill="currentColor"/>
+                <path d="M21 46c3-5 7-8 11-8s8 3 11 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </article>
+          </li>
+        </ol>
+
+        <p class="result-note">※ 신뢰도는 AI가 스스로 평가한 확신 정도이며, 결과의 정확도를 보장하지 않습니다.</p>
+      </div>
+    </section>
+
+    <!-- ===== 4. About ===== -->
+    <section class="section section--deep about" id="about" aria-labelledby="about-title">
+      <div class="container about__inner">
+        <p class="eyebrow">MOODWAVE</p>
+        <h2 class="section-title" id="about-title">ABOUT</h2>
+        <p class="section-text about__text">MOODWAVE는 OpenAI API를 활용해 문장의 감정을 분석하는 서비스입니다.<br>입력한 문장은 분석을 위해 OpenAI로 전송되며, MOODWAVE는 이를 저장하지 않습니다.</p>
+        <button class="button button--primary" id="again-button" type="button">
+          새 문장 분석하기
+          <svg class="arrow-icon" viewBox="0 0 32 12" aria-hidden="true" focusable="false"><path d="M0 6h30M25 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__logo">MOODWAVE</p>
+      <p class="site-footer__copy">© 2026 MOODWAVE. All rights reserved. · Powered by OpenAI API</p>
+    </div>
+  </footer>
+</body>
+</html>
